@@ -1,0 +1,811 @@
+kiosk_mode:
+  mobile_settings:
+    hide_header: true
+views:
+  - title: Home
+    cards:
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            ha-card {
+              position: static;
+              z-index: 3;
+              top: 8px;
+              left: 8px;
+              right: 8px;
+              height: 45px;
+              padding: 4px 10px;
+              border-radius: 10px;
+              background-color: rgba(10, 10, 10, .5);
+              -webkit-backdrop-filter: blur(100px);
+            }
+        card:
+          type: grid
+          square: false
+          columns: 1
+          style:
+            z-index: 10
+          cards:
+            - type: custom:mushroom-chips-card
+              chips:
+                - type: template
+                  icon: mdi:information
+                  icon_color: '#ffffff'
+                  tap_action:
+                    action: navigate
+                    navigation_path: system
+                - type: spacer
+                - type: entity
+                  entity: lock.schlage_front_door
+                  tap_action:
+                    action: toggle
+                  use_entity_picture: false
+                  icon: mdi:door
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --chip-padding: 4px;
+                      }       
+                - type: entity
+                  entity: cover.ratgdov25i_0af96a_door
+                  tap_action:
+                    action: toggle
+                  use_entity_picture: false
+                  icon: mdi:garage
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --chip-padding: 4px;
+                      }       
+                - type: entity
+                  entity: sensor.all_lights_count
+                  tap_action:
+                    action: navigate
+                    navigation_path: lights
+                  icon_color: '#ffff00'
+                  icon: mdi:lightbulb
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --chip-padding: 4px;
+                      }
+                - type: entity
+                  entity: sensor.devices_count
+                  icon_color: '#0171A4'
+                  tap_action:
+                    action: navigate
+                    navigation_path: devices
+                  icon: mdi:television
+                  card_mod:
+                    style: |
+                      ha-card {
+                        --chip-padding: 4px;
+                      }
+                - type: spacer
+                - type: action
+                  tap_action:
+                    action: navigate
+                    navigation_path: settings
+                  icon: mdi:tools
+              card_mod:
+                style: |
+                  :host {
+                    --chip-background: rgba(0, 0, 0, 0) !important; /* Change this to your desired color */
+                    --mush-card-primary-font-size: 28px;
+                  }
+                  ha-card {
+                    --card-primary-font-size: 30px !important;
+                    --card-secondary-font-size: 30px;
+                    --chip-icon-size: 15px;
+                  }
+      - type: horizontal-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Hi, user!
+            subtitle_tap_action:
+              action: none
+            title_tap_action:
+              action: none
+            subtitle: ''
+            card_mod:
+              style: |
+                ha-card {
+                  padding-top: 0px !important;
+                  padding-bottom: 0 !important;
+                }
+                h1 {
+                  font-size: 18px !important;  # Adjust the font size as needed
+                }
+          - type: custom:mushroom-chips-card
+            chips:
+              - type: weather
+                entity: weather.forecast_home
+                show_temperature: true
+                show_conditions: true
+            alignment: end
+            card_mod:
+              style: |
+                mushroom-shape-icon$: |
+                  .shape {
+                    --shape-color: transparent !important;
+                  }  
+                :host {
+                  width: 50px;
+                  --chip-background: rgba(0, 0, 0, 0) !important;
+                }
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: Controls
+                subtitle_tap_action:
+                  action: none
+                title_tap_action:
+                  action: none
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                      padding-bottom: 0 !important;
+                    }
+                    h1 {
+                      font-size: 20px !important;  # Adjust the font size as needed
+                    }
+          - type: horizontal-stack
+            cards:
+              - type: custom:mod-card
+                style: >
+                  ha-card {
+                    white-space: nowrap;
+                    scrollbar-width: none; /* For Firefox */
+                    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+                  }
+
+                  ha-card::-webkit-scrollbar { /* For Chrome, Safari, and Opera
+                  */
+                    display: none;
+                  }
+                card:
+                  type: horizontal-stack
+                  cards:
+                    - type: custom:mod-card
+                      style: |
+                        ha-card {
+                          margin-left: 0px;
+                          margin-right: 0px;
+                        }
+                      card:
+                        type: custom:button-card
+                        entity: climate.google_nest
+                        name: Google Nest
+                        icon: |
+                          [[[
+                            if (entity.state === 'heat') return 'mdi:fire';
+                            if (entity.state === 'cool') return 'mdi:snowflake';
+                            return 'mdi:home-thermometer';
+                          ]]]
+                        show_state: false
+                        show_icon: true
+                        show_label: true
+                        label: |
+                          [[[ 
+                            const mode = states['climate.google_nest'].state;
+                            const targetTemp = states['climate.google_nest'].attributes.temperature;
+                            const hvacAction = states['climate.google_nest'].attributes.hvac_action;
+
+                            if (mode === 'off') {
+                              return `Off`;
+                            } else if (mode === 'heat') {
+                              if (hvacAction === 'heating') {
+                                return `Heating - ${targetTemp}°`;
+                              } else if (hvacAction === 'idle') {
+                                return `Heat set to ${targetTemp}°`;
+                              }
+                            } else if (mode === 'cool') {
+                              if (hvacAction === 'cooling') {
+                                return `Cooling - ${targetTemp}°`;
+                              } else if (hvacAction === 'idle') {
+                                return `AC set to ${targetTemp}°`;
+                              }
+                            }
+                          ]]]
+                        layout: icon_state_name2nd
+                        tap_action:
+                          action: navigate
+                          navigation_path: /mobile-new/climate
+                        hold_action:
+                          action: more-info
+                        styles:
+                          card:
+                            - padding: 0px
+                            - height: 55px
+                            - width: null
+                            - border-radius: 10px
+                            - background-color: |
+                                [[[ 
+                                  if (entity.attributes.hvac_action === 'cooling') return 'rgba(255, 255, 255,.8)'; 
+                                  if (entity.attributes.hvac_action === 'heating') return 'rgba(255, 255, 255,.8)'; 
+                                  return ''; 
+                                ]]]
+                          name:
+                            - justify-self: left
+                            - padding-bottom: 0px
+                            - font-weight: 600
+                            - font-size: 14px
+                            - top-margin: null
+                            - color: |
+                                [[[ 
+                                  if (entity.attributes.hvac_action === 'cooling') return 'black'; 
+                                  if (entity.attributes.hvac_action === 'heating') return 'black'; 
+                                  return 'white'; 
+                                ]]]
+                          label:
+                            - font-size: 14px
+                            - font-weight: 400
+                            - padding-bottom: 27px
+                            - justify-self: left
+                            - color: |
+                                [[[ 
+                                  if (entity.attributes.hvac_action === 'cooling') return 'black'; 
+                                  if (entity.attributes.hvac_action === 'heating') return 'black'; 
+                                  return 'white'; 
+                                ]]]
+                          state:
+                            - justify-self: center
+                            - font-size: 28px
+                            - font-weight: 600
+                            - padding-bottom: 10px
+                          icon:
+                            - width: 30px
+                            - color: |
+                                [[[ 
+                                  if (entity.attributes.hvac_action === 'cooling') return '#0A84FF'; 
+                                  if (entity.attributes.hvac_action === 'heating') return '#D70015'; 
+                                  return 'white'; 
+                                ]]]
+                        state:
+                          - value: 'off'
+                            styles:
+                              card: null
+                              icon: null
+                          - value: cool
+                            styles:
+                              card:
+                                - background-color: rgba(255, 255, 255, 0.8)
+                              name:
+                                - color: black
+                              state:
+                                - color: black
+                              label:
+                                - color: black
+                              icon:
+                                - color: blue
+                          - value: heat
+                            styles:
+                              card:
+                                - background-color: rgba(255, 255, 255, 0.8)
+                              name:
+                                - color: black
+                              state:
+                                - color: black
+                              label:
+                                - color: black
+                              icon:
+                                - color: red
+                                - animation: pulse 2s ease-in-out infinite
+                          - value: cooling
+                            styles:
+                              card:
+                                - background-color: rgba(255, 255, 255, 0.8)
+                              name:
+                                - color: black
+                              state:
+                                - color: black
+                              label:
+                                - color: black
+                              icon:
+                                - color: blue
+                                - animation: spin 1s linear infinite
+                          - value: heating
+                            styles:
+                              card:
+                                - background-color: rgba(255, 255, 255, 0.8)
+                              name:
+                                - color: black
+                              state:
+                                - color: black
+                              label:
+                                - color: black
+                              icon:
+                                - color: red
+                                - animation: pulse 2s ease-in-out infinite
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: sensor.all_lights_count
+                    icon: mdi:lightbulb
+                    show_name: false
+                    show_icon: true
+                    show_state: true
+                    tap_action:
+                      action: navigate
+                      navigation_path: /mobile-new/lights
+                    layout: icon_state
+                    styles:
+                      card:
+                        - padding: 0px
+                        - height: 55px
+                        - border-radius: 10px
+                        - justify-content: center
+                        - align-items: center
+                      icon:
+                        - color: var(--primary-text-color)
+                        - width: 30px
+                      state:
+                        - font-size: 16px
+                        - padding-bottom: 0px
+                        - padding-top: 0px
+                  - type: custom:button-card
+                    entity: sensor.all_holiday_lights_interior_count
+                    icon: mdi:pine-tree
+                    show_name: false
+                    show_icon: true
+                    show_state: true
+                    tap_action:
+                      action: navigate
+                      navigation_path: /mobile-new/holiday-lights
+                    layout: icon_state
+                    styles:
+                      card:
+                        - padding: 0px
+                        - height: 55px
+                        - border-radius: 10px
+                        - justify-content: center
+                        - align-items: center
+                      icon:
+                        - color: var(--primary-text-color)
+                        - width: 30px
+                      state:
+                        - font-size: 16px
+                        - padding-bottom: 0px
+                        - padding-top: 0px
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: Main Floor
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                      padding-bottom: 0 !important;
+                    }
+                    h1 {
+                      font-size: 20px !important;  # Adjust the font size as needed
+                    }
+              - type: custom:mushroom-chips-card
+                chips:
+                  - type: entity
+                    entity: sensor.all_lights_count
+                  - type: entity
+                    entity: sensor.dining_room_temperature
+                alignment: end
+                card_mod:
+                  style: |
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                      }  
+                    :host {
+                      width: 50px;
+                      --chip-background: rgba(0, 0, 0, 0) !important;
+                    }
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Living Room
+                secondary: ''
+                icon: mdi:sofa
+                tap_action:
+                  action: navigate
+                  navigation_path: living-room
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              - type: custom:mushroom-template-card
+                primary: Kitchen
+                secondary: ''
+                icon: mdi:fridge
+                tap_action:
+                  action: navigate
+                  navigation_path: kitchen
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Dining Room
+                secondary: ''
+                icon: mdi:table-furniture
+                tap_action:
+                  action: navigate
+                  navigation_path: dining-room
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              - type: custom:mushroom-template-card
+                primary: Office
+                secondary: ''
+                icon: mdi:chair-rolling
+                tap_action:
+                  action: navigate
+                  navigation_path: office
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Garage
+                secondary: ''
+                icon: mdi:garage
+                tap_action:
+                  action: navigate
+                  navigation_path: garage
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              - type: custom:mushroom-template-card
+                primary: Outside
+                secondary: ''
+                icon: mdi:tree
+                tap_action:
+                  action: navigate
+                  navigation_path: outside
+                icon_color: green
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: Second Floor
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                      padding-bottom: 0 !important;
+                    }
+                    h1 {
+                      font-size: 20px !important;  # Adjust the font size as needed
+                    }
+              - type: custom:mushroom-chips-card
+                chips:
+                  - type: entity
+                    entity: sensor.all_interior_lights_second_floor_count
+                    tap_action:
+                      action: navigate
+                      navigation_path: /mobile-new/lights
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                  - type: entity
+                    entity: sensor.master_bedroom_temperature
+                alignment: end
+                card_mod:
+                  style: |
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                      }  
+                    :host {
+                      width: 50px;
+                      --chip-background: rgba(0, 0, 0, 0) !important;
+                    }
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Master Bedroom
+                secondary: ''
+                icon: mdi:bed
+                tap_action:
+                  action: navigate
+                  navigation_path: master-bedroom
+                icon_color: blue
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              - type: custom:mushroom-template-card
+                primary: Laundry Room
+                secondary: ''
+                icon: mdi:washing-machine
+                tap_action:
+                  action: navigate
+                  navigation_path: laundry-room
+                icon_color: blue
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-title-card
+                title: Basement
+                card_mod:
+                  style: |
+                    ha-card {
+                      padding-top: 0px !important;
+                      padding-bottom: 0 !important;
+                    }
+                    h1 {
+                      font-size: 20px !important;  # Adjust the font size as needed
+                    }
+              - type: custom:mushroom-chips-card
+                chips:
+                  - type: entity
+                    entity: sensor.all_interior_lights_basement_count
+                    tap_action:
+                      action: navigate
+                      navigation_path: /mobile-new/lights
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                  - type: entity
+                    entity: sensor.family_room_temperature
+                alignment: end
+                card_mod:
+                  style: |
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                      }  
+                    :host {
+                      width: 50px;
+                      --chip-background: rgba(0, 0, 0, 0) !important;
+                    }
+          - type: horizontal-stack
+            cards:
+              - type: custom:mushroom-template-card
+                primary: Family Room
+                secondary: ''
+                icon: mdi:controller
+                tap_action:
+                  action: navigate
+                  navigation_path: /mobile-new/family-room
+                icon_color: red
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+              - type: custom:mushroom-template-card
+                primary: Gym
+                secondary: ''
+                icon: mdi:dumbbell
+                tap_action:
+                  action: navigate
+                  navigation_path: /mobile-new/basement-bedroom
+                icon_color: red
+                hold_action:
+                  action: none
+                double_tap_action:
+                  action: none
+      - type: custom:mod-card
+        card_mod:
+          style: |
+            /* Styles for mobile devices */
+            @media (max-width: 767px) {
+              ha-card {
+                z-index: 1;
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                height: 80px;
+                backdrop-filter: blur(120px);
+                -webkit-backdrop-filter: blur(150px);
+                background: rgba(15, 1, 31, .8);
+                opacity: 1;
+                border-radius: 0px;
+                padding: 0px;
+                padding-left: 5px;
+                padding-right: 5px;
+                border-top: .5px solid rgba(100, 100, 100, 0.2);
+                box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.3);  
+              }
+            }
+            /* Styles for desktop devices */
+            @media (min-width: 766px) {
+              ha-card {
+                z-index: -1;
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                width: 20%;
+                height: 75px;
+                background: RGBA(0,0,0,0.50);
+                opacity: 1;
+                border-radius: 0px;
+                padding: 5px;
+              }
+            }
+        card:
+          type: grid
+          square: false
+          columns: 6
+          style:
+            z-index: 10
+          cards:
+            - type: custom:button-card
+              icon: mdi:home
+              name: Home
+              tap_action:
+                action: navigate
+                navigation_path: /mobile-new/
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 1
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - opacity: 1
+                  - font-weight: 400
+                  - padding-top: 6px
+            - type: custom:button-card
+              icon: mdi:lightbulb
+              name: Lights
+              tap_action:
+                action: navigate
+                navigation_path: /mobile-new/lights
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 0.5
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - font-weight: 300
+                  - padding-top: 6px
+            - type: custom:button-card
+              icon: mdi:door
+              name: Rooms
+              tap_action:
+                action: navigate
+                navigation_path: /mobile-new/rooms
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 0.5
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - font-weight: 300
+                  - padding-top: 6px
+            - type: custom:button-card
+              icon: mdi:thermometer
+              name: Climate
+              tap_action:
+                action: navigate
+                navigation_path: climate
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 0.5
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - font-weight: 300
+                  - padding-top: 6px
+            - type: custom:button-card
+              icon: mdi:camera
+              name: Cameras
+              tap_action:
+                action: navigate
+                navigation_path: /ccab4aaf_frigate-fa
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 0.5
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - font-weight: 300
+                  - padding-top: 6px
+            - type: custom:button-card
+              icon: mdi:security
+              name: Security
+              tap_action:
+                action: navigate
+                navigation_path: /mobile-new/security
+              styles:
+                icon:
+                  - color: white
+                  - width: 24px
+                  - height: 24px
+                img_cell:
+                  - display: flex
+                  - align-items: flex-end
+                  - justify-content: center
+                card:
+                  - background: none
+                  - padding: 0px
+                  - opacity: 0.5
+                  - top: 8px
+                  - height: null
+                name:
+                  - font-size: 10px
+                  - align-self: center
+                  - font-weight: 300
+                  - padding-top: 6px
