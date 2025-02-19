@@ -1,0 +1,155 @@
+type: custom:button-card
+name: Living Room
+entity: light.living_room_lights
+tap_action:
+  action: navigate
+  navigation_path: /mobile-new/living-room
+show_label: true
+label: "[[[ return states[\"sensor.living_room_temp_whole_number\"].state; ]]]"
+icon: mdi:sofa
+show_icon: true
+styles:
+  card:
+    - height: 170px
+    - border-radius: 15px
+    - font-size: 10px
+    - padding-bottom: 0px
+    - padding-top: 0px
+    - position: relative
+    - background: url('/local/pictures/living_room_dark.png') no-repeat center center
+    - background-size: cover
+  img_cell:
+    - align-self: center
+    - text-align: left
+    - justify-content: start
+  grid:
+    - grid-template-areas: "\"i badge\" \"n n\" \"s s\" \"l l\""
+    - grid-template-columns: 1fr auto
+    - grid-template-rows: min-content fr min-content min-content
+  name:
+    - justify-self: left
+    - font-weight: 600
+    - font-size: 18px
+    - padding-top: 5px
+    - padding-left: 10px
+    - padding-bottom: 2px
+  label:
+    - justify-self: left
+    - font-size: 14px
+    - font-weight: 400
+    - padding-bottom: 10px
+    - padding-top: px
+    - padding-left: 10px
+  icon:
+    - justify-self: start
+    - padding-top: 5px
+    - padding-left: 10px
+    - padding-bottom: 0px
+    - width: 80px
+    - color: "#D3D3D3"
+  custom_fields:
+    light_badge:
+      - position: absolute
+      - top: 2px
+      - right: 33px
+      - width: 10px
+    fan_badge:
+      - position: absolute
+      - top: 50px
+      - right: 33px
+      - width: 10px
+    shade_badge:
+      - position: absolute
+      - top: 100px
+      - right: 33px
+      - width: 10px
+state:
+  - value: "off"
+    styles:
+      card: null
+      icon: null
+  - value: "on"
+    styles:
+      icon:
+        - color: "#ffce00"
+custom_fields:
+  light_badge:
+    card:
+      type: custom:button-card
+      icon: mdi:light-recessed
+      show_name: false
+      show_state: false
+      entity: "[[[ return entity.entity_id ]]]"
+      tap_action:
+        action: toggle
+      styles:
+        card:
+          - width: 35px
+          - height: 35px
+          - background: transparent
+        icon:
+          - width: 30px
+          - height: 30px
+      state:
+        - value: "off"
+          styles:
+            icon:
+              - color: "#D3D3D3"
+        - value: "on"
+          styles:
+            icon:
+              - color: "#ffce00"
+  fan_badge:
+    card:
+      type: custom:button-card
+      icon: mdi:fan
+      show_name: false
+      show_state: false
+      entity: switch.living_room_fan_wall_switch
+      tap_action:
+        action: toggle
+      styles:
+        card:
+          - width: 35px
+          - height: 35px
+          - background: transparent
+        icon:
+          - width: 30px
+          - height: 30px
+      state:
+        - value: "off"
+          styles:
+            icon:
+              - color: "#D3D3D3"
+        - value: "on"
+          styles:
+            icon:
+              - color: "#05D5FA"
+  shade_badge:
+    card:
+      type: custom:button-card
+      show_name: false
+      show_state: false
+      entity: cover.living_room_middle_shade
+      tap_action:
+        action: call-service
+        service: script.toggle_living_room_shades
+      styles:
+        card:
+          - width: 35px
+          - height: 35px
+          - background: transparent
+        icon:
+          - width: 30px
+          - height: 30px
+      state:
+        - value: closed
+          icon: mdi:roller-shade-closed
+          styles:
+            icon:
+              - color: "#D3D3D3"
+        - value: open
+          icon: mdi:roller-shade
+          styles:
+            icon:
+              - color: green
