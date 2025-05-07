@@ -1,0 +1,110 @@
+#Card#
+type: custom:button-card
+template: small_light_button
+name: Half Bathroom
+entity: light.half_bathroom_lights
+variables:
+  icon: mdi:vanity-light
+
+#Template#
+button_card_templates:
+  small_light_button:
+    layout: icon_name_state2nd
+    show_icon: false
+    tap_action:
+      action: toggle
+    hold_action: []
+    styles:
+      card:
+        - height: 60px
+        - border-radius: 25px
+        - padding: 8px
+        - border: transparent
+      name:
+        - font-weight: bold
+        - font-size: 17px
+        - align-self: middle
+        - justify-self: start
+        - padding-left: 23px
+        - padding-top: px
+        - padding-bottom: px
+        - width: 95px
+        - white-space: normal
+        - word-wrap: break-word
+        - text-align: start
+      grid:
+        - grid-template-areas: '"i n" "i s"'
+        - grid-template-columns: 20% 80%
+        - grid-template-rows: auto auto
+      custom_fields:
+        logo:
+          - position: absolute
+          - left: '-8%'
+          - top: '-9%'
+        logo_icon:
+          - position: absolute
+          - left: '-6%'
+          - top: '-14%'
+    custom_fields:
+      logo:
+        card:
+          type: custom:button-card
+          entity: '[[[ return entity.entity_id ]]]'
+          show_icon: true
+          show_state: false
+          color: transparent
+          show_name: false
+          name: false
+          tap_action:
+            action: toggle
+          hold_action: []
+          styles:
+            card:
+              - background-color: transparent
+              - border-style: none
+            icon:
+              - width: 30px
+              - height: 30px
+              - color: white
+              - padding: 18px
+              - align-self: start
+              - text-align: start
+              - background-color: '#878787'
+              - color: '#878787'
+              - border-radius: 70px
+              - padding-left: px
+          state:
+            - value: 'on'
+              styles:
+                icon:
+                  - background-color: '#FF9500'
+                  - color: '#FF9500'
+            - value: unavailable
+              icon: mdi:circle-off-outline
+      logo_icon:
+        card:
+          type: custom:button-card
+          icon: '[[[ return variables.icon ]]]'
+          entity: '[[[ return entity.entity_id ]]]'
+          show_icon: true
+          show_state: false
+          color: transparent
+          show_name: false
+          name: false
+          tap_action:
+            action: toggle
+          hold_action: []
+          styles:
+            card:
+              - background-color: transparent
+              - border-style: none
+            icon:
+              - width: 35px
+              - height: 35px
+              - color: white
+              - padding: 18px
+              - align-self: start
+              - text-align: start
+              - background-color: transparent
+              - border-radius: 70px
+              - padding-left: px
