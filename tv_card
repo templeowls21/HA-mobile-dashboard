@@ -1,0 +1,177 @@
+#Card#
+type: custom:button-card
+template: large_device_button_tv
+name: Office
+entity: media_player.office_tv
+variables:
+  nav_path: "#office-tv"
+  icon: si:amazonfiretv
+  on_value_1: "on"
+  on_value_2: playing
+  on_value_3: idle
+  on_value_4: paused
+
+#Template#
+button_card_templates:
+  large_device_button_tv:
+    aspect_ratio: 1/1
+    show_icon: false
+    tap_action:
+      action: navigate
+      navigation_path: '[[[ return variables.nav_path ]]]'
+    hold_action: []
+    styles:
+      card:
+        - border-radius: 25px
+        - padding: 8px
+        - border: transparent
+      name:
+        - font-weight: bold
+        - font-size: 24px
+        - align-self: middle
+        - justify-self: start
+        - padding-left: 4px
+        - padding-top: 27px
+        - padding-bottom: 13px
+        - letter-spacing: '-1.0px'
+        - width: 120px
+        - white-space: normal
+        - word-wrap: break-word
+        - text-align: start
+      grid:
+        - grid-template-areas: '"n i1" "i i2" "i i3"'
+        - grid-template-columns: 80% 20%
+        - grid-template-rows: 1fr 1fr 1fr
+      custom_fields:
+        logo:
+          - position: absolute
+          - left: '-7%'
+          - top: 42%
+    custom_fields:
+      logo:
+        card:
+          type: custom:button-card
+          entity: '[[[ return entity.entity_id ]]]'
+          icon: '[[[ return variables.icon ]]]'
+          show_icon: true
+          show_state: false
+          color: transparent
+          show_name: false
+          name: false
+          tap_action:
+            action: navigate
+            navigation_path: '[[[ return variables.nav_path ]]]'
+          hold_action: []
+          styles:
+            card:
+              - background-color: transparent
+              - border-style: none
+            icon:
+              - width: 70px
+              - height: 70px
+              - color: white
+              - padding: 28px
+              - align-self: start
+              - text-align: start
+              - background-color: '#878787'
+              - border-radius: 70px
+          state:
+            - value: '[[[ return variables.on_value_1 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_2 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_3 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_4 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_5 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_6 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_7 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_8 ]]]'
+              styles:
+                icon:
+                  - background-color: '#A52A2A'
+            - value: unavailable
+              icon: mdi:circle-off-outline
+      i1:
+        card:
+          type: custom:button-card
+          entity: '[[[ return entity.entity_id ]]]'
+          show_name: false
+          show_state: false
+          color: transparent
+          show_icon: true
+          icon: mdi:power
+          tap_action:
+            action: toggle
+          hold_action: []
+          styles:
+            card:
+              - background-color: '#878787'
+              - border-radius: 55px
+              - height: 33px
+              - border-style: none
+              - box-shadow: >-
+                  rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px
+                  13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset
+            icon:
+              - width: 22px
+              - height: 22px
+              - color: white
+              - align-self: center
+              - text-align: center
+              - padding: 12px
+            img_cell:
+              - justify-content: middle
+              - align-self: middle
+              - margin: none
+          state:
+            - value: '[[[ return variables.on_value_1 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_2 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_3 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_4 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_5 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_6 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_7 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
+            - value: '[[[ return variables.on_value_8 ]]]'
+              styles:
+                card:
+                  - background-color: '#A52A2A'
